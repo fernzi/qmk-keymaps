@@ -9,7 +9,7 @@ OBJDIR := build
 
 QMK    := pipenv run qmk
 QMKDIR := qmk_firmware
-KBDDIR := qmk_keymaps
+KBDDIR := src
 KBDSRC = $(wildcard $(KBDDIR)/keyboards/xiudi/xd75/keymaps/fernzi/*)
 
 export PIPENV_PIPFILE=$(CURDIR)/Pipfile
