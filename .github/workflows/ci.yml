@@ -2,11 +2,15 @@ name: Continuous Integration
 
 on:
   push:
+    branches:
+      - master
     paths-ignore:
       - '**.md'
       - '.*'
       - 'guix.scm'
   pull_request:
+    branches:
+      - master
     paths-ignore:
       - '**.md'
       - '.*'
@@ -26,7 +30,7 @@ jobs:
             binutils-arm-none-eabi gcc-arm-none-eabi \
             libnewlib-arm-none-eabi dfu-programmer dfu-util \
             teensy-loader-cli libhidapi-hidraw0 libusb-dev \
-            python3-pip python3-tomli
+            python3-pip
           sudo pip install pdm
 
       - uses: actions/checkout@v4

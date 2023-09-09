@@ -1,5 +1,7 @@
 # Fern's Keyboard Layouts
 
+[![CI](https://github.com/fernzi/qmk-keymaps/actions/workflows/ci.yml/badge.svg)][gh-ci]
+
 My personal QMK keymap for the KPRepublic XD75.
 
 Keeping QMK keymaps outside of the main repo is kind of a pain.
@@ -12,3 +14,5 @@ repo and the directory with my keymap into a single tree,
 run the build, and then get the compiled firmware by itself.
 
 Also, I miss when building QMK didn't require Python.
+
+[gh-ci]: https://github.com/fernzi/qmk-keymaps/actions/workflows/ci.yml
