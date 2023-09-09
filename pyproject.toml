@@ -13,3 +13,8 @@ dependencies = [
     "qmk>=1.1.2",
     "doit>=0.36.0",
 ]
+
+
+[tool.pdm.scripts]
+build = "doit build"
+flash = "doit flash"
