@@ -5,12 +5,10 @@
 
 OBJDIR := build
 
-QMK    := pipenv run qmk
+QMK    := pdm run qmk
 QMKDIR := qmk_firmware
 KBDDIR := src
 KBDSRC = $(wildcard $(KBDDIR)/keyboards/xiudi/xd75/keymaps/fernzi/*)
-
-export PIPENV_PIPFILE=$(CURDIR)/Pipfile
 
 ## Rules ##
 
@@ -21,13 +19,13 @@ clean:
 
 init:
 	git submodule update --init --recursive
-	pipenv install
+	pdm install
 
 flash: $(OBJDIR)/out/xiudi_xd75_fernzi.hex
 	fuse-overlayfs -o \
 		lowerdir=$(QMKDIR):$(KBDDIR),upperdir=$(OBJDIR)/out,workdir=$(OBJDIR)/work \
 		$(OBJDIR)/mnt
-	cd $(OBJDIR)/mnt && pipenv run qmk flash -kb xiudi/xd75 -km fernzi
+	cd $(OBJDIR)/mnt && $(QMK) flash -kb xiudi/xd75 -km fernzi
 	sleep 1
 	umount $(OBJDIR)/mnt
 
@@ -36,7 +34,7 @@ $(OBJDIR)/out/xiudi_xd75_fernzi.hex: $(KBDSRC)
 	fuse-overlayfs -o \
 		lowerdir=$(QMKDIR):$(KBDDIR),upperdir=$(OBJDIR)/out,workdir=$(OBJDIR)/work \
 		$(OBJDIR)/mnt
-	cd $(OBJDIR)/mnt && pipenv run qmk compile -kb xiudi/xd75 -km fernzi
+	cd $(OBJDIR)/mnt && $(QMK) compile -kb xiudi/xd75 -km fernzi
 	sleep 1
 	umount $(OBJDIR)/mnt
 
