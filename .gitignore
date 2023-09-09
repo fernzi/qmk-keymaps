@@ -148,6 +148,9 @@ cython_debug/
 # LSP config files
 pyrightconfig.json
 
+# DoIt
+.doit.db
+
 
 ### Emacs ###
 *~
