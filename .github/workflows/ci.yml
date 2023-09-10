@@ -26,13 +26,13 @@ jobs:
     steps:
       - name: Install Dependencies
         run: |
-          sudo apt update
-          sudo apt install -y build-essential \
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
             binutils-avr gcc-avr avr-libc avrdude \
             binutils-arm-none-eabi gcc-arm-none-eabi \
             libnewlib-arm-none-eabi dfu-programmer dfu-util \
             teensy-loader-cli libhidapi-hidraw0 libusb-dev \
-            python3-pip
+            build-essential python3-pip
           sudo pip install pdm
 
       - uses: actions/checkout@v4
