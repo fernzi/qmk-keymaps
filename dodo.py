@@ -17,7 +17,7 @@ DOIT_CONFIG = {
 OUTPUT = Path('build')
 OUTDRS = [OUTPUT / x for x in ('mnt', 'out', 'tmp')]
 SOURCE = Path('src')
-QMKSRC = Path('qmk_firmware')
+QMKSRC = Path('lib', 'qmk_firmware')
 
 
 ## Utilities ##########################################################
