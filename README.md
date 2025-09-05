@@ -1,11 +1,5 @@
 # Fern's Keyboard Layouts
 
-[![License: GPLv3+](https://img.shields.io/badge/License-GPLv3%2B-orange)][gnu-gpl]
-[![CI](https://github.com/fernzi/qmk-keymaps/actions/workflows/ci.yml/badge.svg)][gh-ci]
-
-[gnu-gpl]: https://www.gnu.org/licenses/
-[gh-ci]: https://github.com/fernzi/qmk-keymaps/actions/workflows/ci.yml
-
 My personal QMK keymaps. Only one for the KPRepublic XD75 for now.
 
 Keeping QMK keymaps out of the main repo is kind of a pain.
@@ -22,11 +16,7 @@ But can't get rid of it, so I might as well use it.
 
 ## Installation
 
-Before starting: if you're on Windows, sorry, but I can't help you.
-Maybe see the [section about automatic builds](#automatic-builds)
-at the end of the page.
-
-That said, building requires the PDM package manager for Python,
+Building requires the PDM package manager for Python,
 and `fuse-overlayfs`, which you can install with the commands
 
 ``` shell
@@ -93,15 +83,3 @@ you use the `pdm run doit flash:${BRAND}:${KEYBOARD}:${KEYMAP}`
 form of the command to flash a single keyboard, rather than
 `pdm run flash`, unless you actually want to flash every single
 keyboard you own, for whatever reason.
-
-## Automatic Builds
-
-If you'd rather avoid installing most of the dependencies,
-I've also set up a [GitHub action][ci-yml] to automatically build
-all layouts on every Git change, so you could fork this repo,
-substitute my layouts with yours, push them, let GitHub run the build,
-and download the artifact with the compiled firmware when it's done.
-
-You'd need to figure out how to flash your keyboard on your own though.
-
-[ci-yml]: .github/workflows/ci.yml
