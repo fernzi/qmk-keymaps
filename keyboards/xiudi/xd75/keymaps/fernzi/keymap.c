@@ -1,13 +1,10 @@
-/* Copyright © 2021-2023 Fern Zapata
- * This program is subject to the terms of the GNU GPL, version 3
- * or, at your option, any later version. If a copy of it was not
- * included with this file, see https://www.gnu.org/licenses/. */
+/* Copyright © 2021-2025 Fern Zapata
+ * This file is under the terms of the GNU GPL version 3, or (at your
+ * option) any later version. If you didn't receive a copy of the GPL
+ * along with this file, see <https://www.gnu.org/licenses/>. */
 
 #include QMK_KEYBOARD_H
 #include "joystick.h"
-#if STENO_ENABLE
-#include "keymap_steno.h"
-#endif
 
 enum xd75_layers
 {
@@ -15,9 +12,6 @@ enum xd75_layers
   _QW,
 #if JOYSTICK_ENABLE
   _HB,
-#endif
-#if STENO_ENABLE
-  _PV,
 #endif
   _L0,
   _R0,
@@ -73,12 +67,6 @@ joystick_config_t joystick_axes[JOYSTICK_AXIS_COUNT] = {
 #define HITBOX XXXXXXX
 #endif // JOYSTICK_ENABLE
 
-#if STENO_ENABLE
-#define PLOVER TG(_PV)
-#else
-#define PLOVER XXXXXXX
-#endif // STENO_ENABLE
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DV] = LAYOUT_ortho_5x15( // DVORAK
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, KC_P7,   KC_P8,   KC_P9,
@@ -103,16 +91,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     HB_MOD,  HB_LEFT, HB_DOWN, HB_RGHT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTA,  HB_BTB,  HB_BTX,  HB_BTY,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
     HB_SWAP, XXXXXXX, XXXXXXX, HB_UP,   HB_UP,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTA,  HB_BTA,  HB_BTB,  HB_BTL3, HB_BTR3
-  ),
-#endif
-
-#if STENO_ENABLE
-  [_PV] = LAYOUT_ortho_5x15( // PLOVER
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,  STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC,  XXXXXXX, XXXXXXX, XXXXXXX,
-    STN_FN,  STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1, STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR,  XXXXXXX, XXXXXXX, XXXXXXX,
-    XXXXXXX, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR,  XXXXXXX, XXXXXXX, XXXXXXX,
-    PLOVER,  XXXXXXX, XXXXXXX, STN_A,   STN_O,   XXXXXXX, XXXXXXX, STN_E,   STN_U,   STN_PWR, STN_RE1, STN_RE2, XXXXXXX, XXXXXXX, XXXXXXX
   ),
 #endif
 
@@ -141,20 +119,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [_CF] = LAYOUT_ortho_5x15( // CONFIGRURE
-    _______, DVORAK,  QWERTY,  HITBOX,  PLOVER,  _______, _______, _______, _______, _______, _______, _______, DB_TOGG, EE_CLR,  QK_BOOT,
+    _______, DVORAK,  QWERTY,  HITBOX,  _______, _______, _______, _______, _______, _______, _______, _______, DB_TOGG, EE_CLR,  QK_BOOT,
     _______, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 };
-
-#if STENO_ENABLE
-void matrix_init_user()
-{
-  steno_set_mode(STENO_MODE_GEMINI);
-}
-#endif // STENO_ENABLE
 
 layer_state_t layer_state_set_user(layer_state_t state)
 {
@@ -219,7 +190,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
       joystick_set_axis(
         1 + axes.swap, (axes.down ?: -axes.up) * HB_JHI >> axes.mod);
       return false;
-#endif
+#endif // JOYSTICK_ENABLE
     case MKC_P00:
       if (record->event.pressed) {
         SEND_STRING("00");
