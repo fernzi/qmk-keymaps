@@ -42,21 +42,25 @@ enum my_layer_keycode
 };
 
 #if JOYSTICK_ENABLE
-#define HITBOX TG(_HB)
-#define HB_JHI 127
-#define HB_BTA JS_0
-#define HB_BTB JS_1
-#define HB_BTX JS_2
-#define HB_BTY JS_3
-#define HB_BTL1 JS_4
-#define HB_BTR1 JS_5
-#define HB_BTL2 JS_6
-#define HB_BTR2 JS_7
-#define HB_BTL3 JS_8
-#define HB_BTR3 JS_9
-#define HB_BTSL JS_10
-#define HB_BTHM JS_11
-#define HB_BTST JS_12
+enum my_hitbox_keycode
+{
+  HITBOX = TG(_HB),
+  HB_BTA = JS_0,
+  HB_BTB,
+  HB_BTX,
+  HB_BTY,
+  HB_BTL1,
+  HB_BTR1,
+  HB_BTL2,
+  HB_BTR2,
+  HB_BTL3,
+  HB_BTR3,
+  HB_BTSL,
+  HB_BTHM,
+  HB_BTST,
+};
+
+int8_t const HB_JHI = 127;
 
 joystick_config_t joystick_axes[JOYSTICK_AXIS_COUNT] = {
   [0] = JOYSTICK_AXIS_VIRTUAL,
@@ -146,7 +150,13 @@ static struct
   uint8_t rght;
 } axes = {0};
 
-#define SIGN(x) ((x > 0) - (x < 0))
+#define MY_CMP(x, y) ((x > y) - (x < y))
+
+static int8_t to_axis(int8_t x)
+{
+  return MY_CMP(x, 0) * HB_JHI >> axes.mod;
+}
+
 #endif // JOYSTICK_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record)
@@ -163,35 +173,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
 #if JOYSTICK_ENABLE
     case HB_MOD:
       axes.mod = record->event.pressed;
-      int16_t ax = joystick_state.axes[0 + axes.swap];
-      joystick_set_axis(0 + axes.swap, SIGN(ax) * HB_JHI >> axes.mod);
-      ax = joystick_state.axes[1 + axes.swap];
-      joystick_set_axis(1 + axes.swap, SIGN(ax) * HB_JHI >> axes.mod);
+      for (uint8_t i = 0; i < 2; ++i) {
+        uint8_t ai = i + axes.swap;
+        int8_t av = joystick_state.axes[ai];
+        joystick_set_axis(ai, to_axis(av));
+      }
       return false;
     case HB_SWAP:
-      if (record->event.pressed) {
-        axes.swap = (axes.swap + 2) % JOYSTICK_AXIS_COUNT;
-      }
+      axes.swap += 2 * record->event.pressed;
+      axes.swap %= JOYSTICK_AXIS_COUNT;
       return false;
     case HB_LEFT:
       axes.left = record->event.pressed;
       joystick_set_axis(
-        0 + axes.swap, (-axes.left ?: axes.rght) * HB_JHI >> axes.mod);
+        0 + axes.swap, to_axis(-axes.left ?: axes.rght));
       return false;
     case HB_RGHT:
       axes.rght = record->event.pressed;
       joystick_set_axis(
-        0 + axes.swap, (axes.rght ?: -axes.left) * HB_JHI >> axes.mod);
+        0 + axes.swap, to_axis(axes.rght ?: -axes.left));
       return false;
     case HB_UP:
       axes.up = record->event.pressed;
       joystick_set_axis(
-        1 + axes.swap, (-axes.up ?: axes.down) * HB_JHI >> axes.mod);
+        1 + axes.swap, to_axis(-axes.up ?: axes.down));
       return false;
     case HB_DOWN:
       axes.down = record->event.pressed;
       joystick_set_axis(
-        1 + axes.swap, (axes.down ?: -axes.up) * HB_JHI >> axes.mod);
+        1 + axes.swap, to_axis(axes.down ?: -axes.up));
       return false;
 #endif // JOYSTICK_ENABLE
     case MKC_P00:
