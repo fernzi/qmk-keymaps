@@ -143,11 +143,8 @@ layer_state_t layer_state_set_user(layer_state_t state)
 static struct
 {
   uint8_t swap;
-  uint8_t mod;
-  uint8_t left;
-  uint8_t down;
-  uint8_t up;
-  uint8_t rght;
+  bool mod;
+  bool l, r, u, d;
 } axes = {0};
 
 #define MY_CMP(x, y) ((x > y) - (x < y))
@@ -184,24 +181,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record)
       axes.swap %= JOYSTICK_AXIS_COUNT;
       return false;
     case HB_LEFT:
-      axes.left = record->event.pressed;
-      joystick_set_axis(
-        0 + axes.swap, to_axis(-axes.left ?: axes.rght));
+      axes.l = record->event.pressed;
+      joystick_set_axis(0 + axes.swap, to_axis(-axes.l ?: +axes.r));
       return false;
     case HB_RGHT:
-      axes.rght = record->event.pressed;
-      joystick_set_axis(
-        0 + axes.swap, to_axis(axes.rght ?: -axes.left));
+      axes.r = record->event.pressed;
+      joystick_set_axis(0 + axes.swap, to_axis(+axes.r ?: -axes.l));
       return false;
     case HB_UP:
-      axes.up = record->event.pressed;
-      joystick_set_axis(
-        1 + axes.swap, to_axis(-axes.up ?: axes.down));
+      axes.u = record->event.pressed;
+      joystick_set_axis(1 + axes.swap, to_axis(-axes.u ?: +axes.d));
       return false;
     case HB_DOWN:
-      axes.down = record->event.pressed;
-      joystick_set_axis(
-        1 + axes.swap, to_axis(axes.down ?: -axes.up));
+      axes.d = record->event.pressed;
+      joystick_set_axis(1 + axes.swap, to_axis(+axes.d ?: -axes.u));
       return false;
 #endif // JOYSTICK_ENABLE
     case MKC_P00:
