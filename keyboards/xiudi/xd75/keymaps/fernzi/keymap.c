@@ -61,13 +61,8 @@ enum my_hitbox_keycode
 
 int8_t const HB_JHI = 127;
 
-joystick_config_t joystick_axes[JOYSTICK_AXIS_COUNT] = {
-  [0] = JOYSTICK_AXIS_VIRTUAL,
-  [1] = JOYSTICK_AXIS_VIRTUAL,
-  [2] = JOYSTICK_AXIS_VIRTUAL,
-  [3] = JOYSTICK_AXIS_VIRTUAL,
-  [4] = JOYSTICK_AXIS_VIRTUAL,
-  [5] = JOYSTICK_AXIS_VIRTUAL,
+joystick_config_t joystick_axes[] = {
+  [0 ... JOYSTICK_AXIS_COUNT - 1] = JOYSTICK_AXIS_VIRTUAL,
 };
 #endif // JOYSTICK_ENABLE
 
@@ -81,11 +76,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_QWERTY] = LAYOUT_ortho_5x15(
-    KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, KC_P7,   KC_P8,   KC_P9,
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,  KC_P4,   KC_P5,   KC_P6,
-    KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_P1,   KC_P2,   KC_P3,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  KC_P0,   _______, KC_PDOT,
-    KC_LCTL, MY_FUNC, KC_LGUI, KC_LALT, MY_LOWR, KC_SPC,  KC_SPC,  MY_UPPR, KC_RALT, KC_RGUI, KC_RCTL, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+    _______, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    _______, _______, _______, _______,
+    _______, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, _______, _______, _______,
+    _______, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 
 #if JOYSTICK_ENABLE
@@ -94,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTL1, HB_BTR1, HB_BTL2, HB_BTR2,
     HB_MOD,  HB_LEFT, HB_DOWN, HB_RGHT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTA,  HB_BTB,  HB_BTX,  HB_BTY,
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    HB_SWAP, XXXXXXX, XXXXXXX, HB_UP,   HB_UP,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTA,  HB_BTA,  HB_BTB,  HB_BTL3, HB_BTR3
+    HB_SWAP, XXXXXXX, XXXXXXX, HB_UP,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, HB_BTA,  HB_BTB,  HB_BTL3, HB_BTR3
   ),
 #endif
 
